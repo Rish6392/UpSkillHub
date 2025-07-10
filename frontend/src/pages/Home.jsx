@@ -2,7 +2,7 @@ import React from 'react'
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import HighlightText from '../components/core/HomePage/HighlightText.jsx';
-import CTAButton from '../components/core/HomePage/Button.jsx';
+import CTAButton from '../components/core/HomePage/CTAButton.jsx';
 
 const Home = () => {
     return (
@@ -37,11 +37,11 @@ const Home = () => {
                 </div>
 
                 <div className='flex flex-row gap-7 mt-8'>
-                    <CTAButton>
+                    <CTAButton active={true} linkto={"/signup"}>
                        Learn More
                     </CTAButton>
 
-                    <CTAButton>
+                    <CTAButton active={false} lonkto={"/login"}>
                         Book a Demo
                     </CTAButton>
                 </div>
