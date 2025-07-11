@@ -7,6 +7,10 @@ import Banner from "../Assets/Images/banner.mp4";
 import CodeBlocks from '../components/core/HomePage/CodeBlocks.jsx';
 import TimelineSection from '../components/core/HomePage/TimelineSection.jsx';
 import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection.jsx';
+import InstructorSection from '../components/core/HomePage/InstructorSection.jsx';
+import ReviewSlider from '../components/core/HomePage/ReviewSlider.jsx';
+
+
 const Home = () => {
     return (
         <div>
@@ -181,21 +185,31 @@ const Home = () => {
 
                     </div>
 
-                <TimelineSection/>
+                    <TimelineSection />
 
-                <LearningLanguageSection/>
+                    <LearningLanguageSection />
 
                 </div>
 
-                
+
 
             </div>
 
-                {/* Section 3 */}
+            {/* Section 3 */}
+            <div className="relative mx-auto my-20 flex max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
+                {/* Become a instructor section */}
+                <InstructorSection />
 
-                {/* footer */}
+                {/* Reviws from Other Learner */}
+                <h1 className="text-center text-4xl font-semibold mt-8">
+                    Happy & Satisfied Learners!
+                </h1>
+                <ReviewSlider />
+            </div>
 
-            
+            {/* footer */}
+
+
         </div>
     )
 }
