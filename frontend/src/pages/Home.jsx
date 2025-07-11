@@ -3,11 +3,13 @@ import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import HighlightText from '../components/core/HomePage/HighlightText.jsx';
 import CTAButton from '../components/core/HomePage/CTAButton.jsx';
+import Banner from "../Assets/Images/banner.mp4";
+import CodeBlocks from '../components/core/HomePage/CodeBlocks.jsx';
 
 const Home = () => {
     return (
         <div>
-            
+
             {/* Section 1 */}
             <div className='relative mx-auto flex flex-col w-11/12 items-center text-white justify-between'>
 
@@ -38,12 +40,96 @@ const Home = () => {
 
                 <div className='flex flex-row gap-7 mt-8'>
                     <CTAButton active={true} linkto={"/signup"}>
-                       Learn More
+                        Learn More
                     </CTAButton>
 
                     <CTAButton active={false} lonkto={"/login"}>
                         Book a Demo
                     </CTAButton>
+                </div>
+
+                <div className='mx-3 my-12 shadow-blue-200'>
+                    <video
+                        muted
+                        loop
+                        autoPlay
+                    >
+                        <source src={Banner} type="video/mp4" />
+                    </video>
+                </div>
+
+                {/* Code Section 1 */}
+                <div>
+                    <CodeBlocks
+                        position={"lg:flex-row"}
+                        heading={
+                            <div className='text-4xl font-semibold'>
+                                Unlock Your
+                                <HighlightText text={"Coding Potential"} />
+                                with our online courses
+                            </div>
+                        }
+                        subheading={
+                            "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
+                        }
+                        ctabtn1={
+                            {
+                                btnText: "Try it Yourself",
+                                active: true,
+                                linkto: "/signup",
+                            }
+                        }
+                        ctabtn2={
+                            {
+                                btnText: "learn more",
+                                active: false,
+                                linkto: "/login",
+                            }
+                        }
+
+                        codeblock={`<!DOCTYPE html>
+                        <html>\n<head>\n<title>Example</title>\n<linkrel="stylesheet"\nhref="styles.css">\n</head>\n<body>\n<h1><ahref="/">Header</a>\n</h1>\n<nav><ahref="one/">One</a></nav>`}
+                        codeColor={"text-yellow-25"}
+                        backgroundGradient={""}
+
+                    />
+                </div>
+
+                 {/* Code Section 2 */}
+                <div>
+                    <CodeBlocks
+                        position={"lg:flex-row-reverse"}
+                        heading={
+                            <div className='text-4xl font-semibold'>
+                                Unlock Your
+                                <HighlightText text={"Coding Potential"} />
+                                with our online courses
+                            </div>
+                        }
+                        subheading={
+                            "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
+                        }
+                        ctabtn1={
+                            {
+                                btnText: "Try it Yourself",
+                                active: true,
+                                linkto: "/signup",
+                            }
+                        }
+                        ctabtn2={
+                            {
+                                btnText: "learn more",
+                                active: false,
+                                linkto: "/login",
+                            }
+                        }
+
+                        codeblock={`<!DOCTYPE html>
+                        <html>\n<head>\n<title>Example</title>\n<linkrel="stylesheet"\nhref="styles.css">\n</head>\n<body>\n<h1><ahref="/">Header</a>\n</h1>\n<nav><ahref="one/">One</a></nav>`}
+                        codeColor={"text-yellow-25"}
+                        backgroundGradient={""}
+
+                    />
                 </div>
             </div>
 
