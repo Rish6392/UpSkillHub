@@ -9,7 +9,7 @@ import TimelineSection from '../components/core/HomePage/TimelineSection.jsx';
 import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection.jsx';
 import InstructorSection from '../components/core/HomePage/InstructorSection.jsx';
 import ReviewSlider from '../components/core/HomePage/ReviewSlider.jsx';
-
+import Footer from '../components/core/HomePage/common/Footer.jsx';
 
 const Home = () => {
     return (
@@ -208,7 +208,7 @@ const Home = () => {
             </div>
 
             {/* footer */}
-
+           <Footer/>
 
         </div>
     )
