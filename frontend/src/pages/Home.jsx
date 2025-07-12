@@ -10,7 +10,7 @@ import LearningLanguageSection from '../components/core/HomePage/LearningLanguag
 import InstructorSection from '../components/core/HomePage/InstructorSection.jsx';
 import ReviewSlider from '../components/core/HomePage/ReviewSlider.jsx';
 import Footer from '../components/common/Footer';
-
+import ExploreMore from '../components/core/HomePage/ExploreMore.jsx';
 const Home = () => {
     return (
         <div>
@@ -136,6 +136,8 @@ const Home = () => {
 
                     />
                 </div>
+
+                <ExploreMore/>
             </div>
 
             {/* Section 2 */}
