@@ -1,9 +1,9 @@
 import React from "react";
 import { FooterLink2 } from "../../data/footer-links";
-
 import { Link } from "react-router-dom";
 import SendIcon from "@mui/icons-material/Send";
 import Logo from "../../Assets/Logo/Logo-Full-Light.png";
+
 import {
   FaFacebook,
   FaGoogle,
@@ -181,7 +181,7 @@ const Footer = () => {
             ))}
           </div>
           <div className="text-center mt-4 lg:mt-0">
-            Made with ❤️ © {new Date().getFullYear()} Studynotion
+            Made with ❤️Rishabh © {new Date().getFullYear()} UpSkillHub
           </div>
         </div>
       </div>
