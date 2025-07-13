@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit"
 
-const initialState={
+const initialState={ //It tries to load the token from localStorage on app start.
     token:localStorage.getItem("token")? JSON.parse(localStorage.getItem("token")):null,
 
 };
