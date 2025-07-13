@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import {Provider} from "react-redux"   // Makes Redux store available to all components.
 import rootReducer from './reducer/index.js'  // A Redux Toolkit function to create the Redux store.
 import {configureStore} from '@reduxjs/toolkit' //  Combines all reducers.
-
+import {Toaster} from "react-hot-toast";
 
 //You create a Redux store using rootReducer.
 const store = configureStore({
@@ -18,6 +18,7 @@ createRoot(document.getElementById('root')).render(
     <Provider store ={store}>
       <BrowserRouter>
         <App />
+        <Toaster/>
       </BrowserRouter>
     </Provider>
 
