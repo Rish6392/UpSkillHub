@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Home from "./pages/Home.jsx"
+import Navbar from './components/common/Navbar.jsx'
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
   return (
     <div className="min-h-screen w-full bg-richblack-900 flex flex-col font-inter overflow-x-hidden overflow-y-auto">
 
-
+     <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>
