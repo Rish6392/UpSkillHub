@@ -143,33 +143,26 @@ const Home = () => {
             </div>
 
             {/* Section 2 */}
-            <div className='bg-pure-greys-5 text-richblack-700'>
-                <div className='homepage_bg h-[310px]'>
-
-                    <div className='w-11/12 max-w-maxContent flex flex-col items-center gap-5 mx-auto'>
-                        <div className='h-[150px]'></div>
-                        <div className='flex flex-row gap-7 text-white '>
+            <div className="bg-pure-greys-5 text-richblack-700">
+                <div className="homepage_bg h-[320px]">
+                    {/* Explore Full Catagory Section */}
+                    <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
+                        <div className="lg:h-[150px]"></div>
+                        <div className="flex flex-row gap-7 text-white lg:mt-8">
                             <CTAButton active={true} linkto={"/signup"}>
-                                <div className='flex items-center gap-2'>
+                                <div className="flex items-center gap-2">
                                     Explore Full Catalog
                                     <FaArrowRight />
                                 </div>
                             </CTAButton>
-
-                            <CTAButton active={false} linkto={"/signup"}>
-                                <div className='flex items-center gap-2'>
-                                    Learn More
-                                </div>
+                            <CTAButton active={false} linkto={"/login"}>
+                                Learn More
                             </CTAButton>
                         </div>
-
                     </div>
-
-
                 </div>
 
-                <div className='w-11/12 max-w-maxContent mx-auto flex flex-col items-center justify-between gap-7 '>
-
+                <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 ">
                     {/* Job that is in Demand - Section 1 */}
                     <div className="mb-10 mt-[-100px] flex flex-col justify-between gap-7 lg:mt-20 lg:flex-row lg:gap-0">
                         <div className="text-4xl font-semibold lg:w-[45%] ">
@@ -186,8 +179,8 @@ const Home = () => {
                                 <div className="">Learn More</div>
                             </CTAButton>
                         </div>
-
                     </div>
+
 
                     <TimelineSection />
 
