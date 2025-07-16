@@ -9,6 +9,7 @@ import OpenRoute from "./components/core/Auth/OpenRoute";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from './pages/ForgotPassword.jsx'
+import UpdatePassword from './pages/UpdatePassword.jsx'
 
 function App() {
 
@@ -42,6 +43,15 @@ function App() {
           element={
             <OpenRoute>
               <ForgotPassword />
+            </OpenRoute>
+          }
+        />
+
+         <Route
+          path="/update-password/:token"
+          element={
+            <OpenRoute>
+              <UpdatePassword />
             </OpenRoute>
           }
         />
