@@ -12,17 +12,17 @@ import { useEffect } from 'react'
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 
-const subLinks = [
-  {
-    title:"python",
-    link:"/catalog/python"
-  },
-  {
-    title:"web dev",
-    link:"/catalog/web-development"
+// const subLinks = [
+//   {
+//     title:"python",
+//     link:"/catalog/python"
+//   },
+//   {
+//     title:"web dev",
+//     link:"/catalog/web-development"
 
-  },
-]
+//   },
+// ]
 
 const Navbar = () => {
 
@@ -32,22 +32,23 @@ const Navbar = () => {
 
   const loaction = useLocation();
 
-  //const [subLinks,setSubLinks] = useState([]);
+  const [subLinks,setSubLinks] = useState([]);
 
-  // const fetchSublinks = async()=>{
-  //       try{
-  //          const result =await apiConnector("GET",categories.CATEGORIES_API);
-  //          console.log("Printing Sublinks result",result);
-  //          //setSubLinks(result.data.data);
-  //       }
-  //       catch(error){
-  //         console.log("Could not fetch the Category list")
-  //       }
-  //      }
+  const fetchSublinks = async()=>{
+        try{
+           const result =await apiConnector("GET",categories.CATEGORIES_API);
+           console.log("Printing Sublinks result",result);
+           setSubLinks(result.data.data);
 
-  // useEffect(()=>{
-  //      //fetchSublinks();
-  // },[])
+        }
+        catch(error){
+          console.log("Could not fetch the Category list")
+        }
+       }
+
+  useEffect(()=>{
+       fetchSublinks();
+  },[])
 
 
   const matchRoute = (route)=>{
@@ -91,10 +92,17 @@ const Navbar = () => {
                       {
                         subLinks.length ? (
                           
-                            subLinks.map((subLinks,index)=>(
-                              <Link to={`${subLinks.link}`} key={index}>
-                                 <p>{subLinks.title}</p>
-                              </Link>
+                            subLinks.map((sublink,index)=>(
+                              <Link
+                            to={`/catalog/${sublink?.name
+                              .split(" ")
+                              .join("-")
+                              .toLowerCase()}`}
+                            key={index}
+                            className="block h-fit px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 hover:bg-richblack-50 "
+                          >
+                            {sublink.name}
+                          </Link>
                             ))
                           
                         ):(<div></div>)
