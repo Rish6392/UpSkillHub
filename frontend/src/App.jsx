@@ -1,28 +1,28 @@
-import { useState } from 'react'
+import { useState } from "react";
 // import reactLogo from './Assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Route, Routes } from 'react-router-dom'
-import Home from "./pages/Home.jsx"
-import Navbar from './components/common/Navbar.jsx'
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home.jsx";
+import Navbar from "./components/common/Navbar.jsx";
 import OpenRoute from "./components/core/Auth/OpenRoute";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ForgotPassword from './pages/ForgotPassword.jsx'
-import UpdatePassword from './pages/UpdatePassword.jsx'
-import VerifyEmail from './pages/VerifyEmail.jsx'
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import UpdatePassword from "./pages/UpdatePassword.jsx";
+import VerifyEmail from "./pages/VerifyEmail.jsx";
+import Dashboard from "./pages/Dashboard";
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import PrivateRoute from "./components/core/Auth/PrivateRoute";
 
 function App() {
-
-
   return (
     <div className="min-h-screen w-full bg-richblack-900 flex flex-col font-inter overflow-x-hidden overflow-y-auto">
-
-     <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-         
-         <Route
+
+        <Route
           path="signup"
           element={
             <OpenRoute>
@@ -48,7 +48,7 @@ function App() {
           }
         />
 
-         <Route
+        <Route
           path="/update-password/:token"
           element={
             <OpenRoute>
@@ -57,7 +57,7 @@ function App() {
           }
         />
 
-         <Route
+        <Route
           path="verify-email"
           element={
             <OpenRoute>
@@ -66,10 +66,32 @@ function App() {
           }
         />
 
+        {/* <Route
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
+          <Route path="dashboard/my-profile" element={<MyProfile />} />
+        </Route> */}
 
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
+          <Route path="my-profile" element={<MyProfile />} />
+        </Route>
+
+
+        
       </Routes>
     </div>
   );
 }
 
-export default App
+export default App;
