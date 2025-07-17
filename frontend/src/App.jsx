@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import UpdatePassword from './pages/UpdatePassword.jsx'
+import VerifyEmail from './pages/VerifyEmail.jsx'
 
 function App() {
 
@@ -52,6 +53,15 @@ function App() {
           element={
             <OpenRoute>
               <UpdatePassword />
+            </OpenRoute>
+          }
+        />
+
+         <Route
+          path="verify-email"
+          element={
+            <OpenRoute>
+              <VerifyEmail />
             </OpenRoute>
           }
         />
