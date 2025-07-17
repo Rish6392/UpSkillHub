@@ -20,7 +20,7 @@ const ContactUsForm = () => {
       setLoading(true)
       const res = await apiConnector(
         "POST",
-        contactusEndpoint.CONTACT_US_API,
+        contactusEndpoint.CONTACT_US_API,  // backend likhna hai 
         data
       )
       // console.log("Email Res - ", res)
