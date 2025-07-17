@@ -14,6 +14,7 @@ import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Dashboard from "./pages/Dashboard";
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
+import About from "./pages/About.jsx"
 
 function App() {
   return (
@@ -66,6 +67,16 @@ function App() {
           }
         />
 
+
+         <Route
+          path="about"
+          element={
+            <OpenRoute>
+              <About/>
+            </OpenRoute>
+          }
+        />
+
         {/* <Route
           element={
             <PrivateRoute>
@@ -87,7 +98,7 @@ function App() {
           <Route path="my-profile" element={<MyProfile />} />
         </Route>
 
-
+        
         
       </Routes>
     </div>
