@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
 import About from "./pages/About.jsx"
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -73,6 +74,15 @@ function App() {
           element={
             <OpenRoute>
               <About/>
+            </OpenRoute>
+          }
+        />
+
+         <Route
+          path="contact"
+          element={
+            <OpenRoute>
+              <Contact/>
             </OpenRoute>
           }
         />
