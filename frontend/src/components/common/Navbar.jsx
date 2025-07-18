@@ -13,14 +13,14 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown } from "react-icons/fa";
 
 const Navbar = () => {
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
   const { totalItems } = useSelector((state) => state.cart);
 
-  const loaction = useLocation(); //Grabs the current pathname, used to highlight the active nav link.
+  const location = useLocation(); //Grabs the current pathname, used to highlight the active nav link.
 
   const [subLinks, setSubLinks] = useState([]); //State to hold the categories fetched from the backend.
 
@@ -28,7 +28,7 @@ const Navbar = () => {
     //Fetches all course categories and stores them in sublinks.
     try {
       const result = await apiConnector("GET", categories.CATEGORIES_API);
-      console.log("Printing Sublinks result", result);
+      //console.log("Printing Sublinks result", result);
       setSubLinks(result.data.data);
     } catch (error) {
       console.log("Could not fetch the Category list");

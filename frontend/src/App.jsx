@@ -97,7 +97,7 @@ function App() {
           <Route path="dashboard/my-profile" element={<MyProfile />} />
         </Route> */}
 
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <PrivateRoute>
@@ -106,7 +106,7 @@ function App() {
           }
         >
           <Route path="my-profile" element={<MyProfile />} />
-        </Route>
+        </Route> */}
 
         
         
