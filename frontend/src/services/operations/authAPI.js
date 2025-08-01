@@ -139,12 +139,15 @@ export function login(email, password, navigate) {
 
       toast.success("Login Successful");
       dispatch(setToken(response.data.token));
+      console.log("User data from login response:", response.data.foundUser);
 
-      const userImage = response.data?.user?.image
-        ? response.data.user.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`;
+      const userImage = response.data?.foundUser
+?.image
+        ? response.data.foundUser.image
+        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.foundUser.firstName} ${response.data.foundUser.lastName}`;
 
-      const updatedUser = { ...response.data.user, image: userImage };
+      const updatedUser = { ...response.data.foundUser
+, image: userImage };    
       dispatch(setUser(updatedUser));
 
       localStorage.setItem("token", JSON.stringify(response.data.token));
