@@ -14,8 +14,9 @@ import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Dashboard from "./pages/Dashboard";
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
-import About from "./pages/About.jsx"
+import About from "./pages/About.jsx";
 import Contact from "./pages/Contact";
+import Error from "./pages/Error.jsx";
 
 function App() {
   return (
@@ -68,15 +69,11 @@ function App() {
           }
         />
 
+        <Route path="about" element={<About />} />
 
-      <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
 
-
-      <Route path="contact" element={<Contact />} />
-
-      <Route path="dashboard/my-profile" element={<MyProfile />} />
-
-        {/* <Route
+        <Route
           element={
             <PrivateRoute>
               <Dashboard />
@@ -84,21 +81,9 @@ function App() {
           }
         >
           <Route path="dashboard/my-profile" element={<MyProfile />} />
-        </Route> */}
+        </Route>
 
-        {/* <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        >
-          <Route path="my-profile" element={<MyProfile />} />
-        </Route> */}
-
-        
-        
+        <Route path="*" element={<Error />} />
       </Routes>
     </div>
   );
