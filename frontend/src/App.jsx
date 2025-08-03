@@ -19,8 +19,15 @@ import Contact from "./pages/Contact";
 import Error from "./pages/Error.jsx";
 import Settings from "./components/core/Dashboard/Settings/index.jsx";
 import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses.jsx";
+import Cart from "./components/core/Dashboard/Cart/index.jsx";
+import { ACCOUNT_TYPE } from "./utils/constants.js";
+import { useSelector } from "react-redux";
+
 
 function App() {
+
+   const { user } = useSelector((state) => state.profile);
+
   return (
     <div className="min-h-screen w-full bg-richblack-900 flex flex-col font-inter overflow-x-hidden overflow-y-auto">
       <Navbar />
@@ -84,8 +91,16 @@ function App() {
         >
           <Route path="dashboard/my-profile" element={<MyProfile />} />
           <Route path="dashboard/settings" element={<Settings />} />
-          <Route path="dashboard/enrolled-courses" element={<EnrolledCourses/>}/>
 
+          {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <>
+              <Route path="dashboard/cart" element={<Cart />} />
+              <Route
+                path="dashboard/enrolled-courses"
+                element={<EnrolledCourses />}
+              />
+            </>
+          )}
         </Route>
 
         <Route path="*" element={<Error />} />
