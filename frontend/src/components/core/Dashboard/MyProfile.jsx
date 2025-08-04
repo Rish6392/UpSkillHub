@@ -17,7 +17,7 @@ const MyProfile = () => {
   }
 
   return (
-    <div className="text-white w-full px-10 flex flex-col gap-5">
+    <div className="text-white w-full flex flex-col gap-5">
       <h1 className="text-4xl font font-semibold ">My Profile</h1>
 
       {/* section 1 */}

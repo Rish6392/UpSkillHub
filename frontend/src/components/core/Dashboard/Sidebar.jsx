@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   if (profileLoading || authLoading) {
     return (
-      <div className="grid h-[calc(100vh-3.5rem)] min-w-[220px] items-center border-r border-r-richblack-700 bg-richblack-800 md:sticky md:top-0">
+      <div className="grid h-[calc(100vh-3.5rem)] w-full items-center border-r border-r-richblack-700 bg-richblack-800 md:sticky md:top-0">
         <div className="spinner"></div>
       </div>
     )
