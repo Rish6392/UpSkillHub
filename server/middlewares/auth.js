@@ -5,42 +5,47 @@ const User = require("../models/User");
 
 //auth
 exports.auth = async(req,res,next)=>{
-    try{
-       // extract token
-       const token = req.cookies.token
-                        ||req.boby.token
-                        ||req.header("Authorisation").replace("Bearer ","");
-
-        // if token miiissing,then return response
-        if(!token){
-            return res.status(401).json({
-                success:false,
-                message:"Token is missing"
-            });
-        }   
-        
-        // verify the token
-        try{
-          const decode = jwt.verify(token,process.env.JWT_SECRET);
-          console.log(decode);
-          req.user=decode;
-          
+    try {
+        // extract token
+        let token = null;
+        if (req.cookies && req.cookies.token) {
+            token = req.cookies.token;
+        } else if (req.body && req.body.token) {
+            token = req.body.token;
+        } else if (
+            req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer ")
+        ) {
+            token = req.headers.authorization.split(" ")[1];
         }
-        catch(error){
-           // verifiaction issue
-           console.log(error.message);
-           return res.status(401).json({
-            succes:false,
-            message:error.message,
-           })
+
+        // if token missing, then return response
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Token is missing"
+            });
+        }
+
+        // verify the token
+        try {
+            const decode = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(decode);
+            req.user = decode;
+        } catch (error) {
+            // verification issue
+            console.log(error.message);
+            return res.status(401).json({
+                success: false,
+                message: error.message,
+            });
         }
         next();
-    }
-    catch(error){
-      return res.status(401).json({
-        success:false,
-        message:"Something went wrong while validating the token"
-      })
+    } catch (error) {
+        return res.status(401).json({
+            success: false,
+            message: "Something went wrong while validating the token"
+        });
     }
 }
 

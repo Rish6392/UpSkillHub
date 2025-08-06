@@ -21,10 +21,15 @@ exports.createCourse = async (req, res) => {
             price, tag, category, instructions, status } = req.body;
         console.log("instructions", instructions)
 
-        //get thumbnail
-        // You're extracting the uploaded thumbnail file from the form.
-        //📌 req.files is populated using a file-upload middleware (like express-fileupload or multer).
-        const thumbnail = req.files.thumbnail;
+
+        // get thumbnail (field name must match frontend FormData key: 'thumbnailImage')
+        const thumbnail = req.files && req.files.thumbnailImage;
+        if (!thumbnail) {
+            return res.status(400).json({
+                success: false,
+                message: "Course thumbnail image is required"
+            });
+        }
 
         //validation
         if (!courseName || !courseDescription || !whatYouWillLearn || !category || !price) {
@@ -463,75 +468,75 @@ exports.fetchInstructorCourses = async (req, res) => {
 };
 
 exports.getFullCourseDetails = async (req, res) => {
-	try {
-	  const { courseId } = req.body
-	  // const userId = req.user.id
-	  const courseDetails = await Course.findOne({
-		_id: courseId,
-	  })
-		.populate({
-		  path: "instructor",
-		  populate: {
-			path: "additionalDetails",
+    try {
+      const { courseId } = req.body
+      // const userId = req.user.id
+      const courseDetails = await Course.findOne({
+        _id: courseId,
+      })
+        .populate({
+          path: "instructor",
+          populate: {
+            path: "additionalDetails",
       select:"about"
-		  },
-		})
-		.populate("category")
-		.populate("ratingAndReviews")
-		.populate({
-		  path: "courseContent",
-		  populate: {
-			path: "subSection",
+          },
+        })
+        .populate("category")
+        .populate("ratingAndReviews")
+        .populate({
+          path: "courseContent",
+          populate: {
+            path: "subSection",
       select:"title"
-		  },
-		})
-		.exec()
+          },
+        })
+        .exec()
 
-		
-	  // let courseProgressCount = await courseProgress.findOne({
-		// courseID: courseId,
-		// userID: userId,
-	  // })
+        
+      // let courseProgressCount = await courseProgress.findOne({
+        // courseID: courseId,
+        // userID: userId,
+      // })
   
-	  // console.log("courseProgressCount : ", courseProgressCount)
+      // console.log("courseProgressCount : ", courseProgressCount)
   
-	  if (!courseDetails) {
-		return res.status(400).json({
-		  success: false,
-		  message: `Could not find course with id: ${courseId}`,
-		})
-	  }
+      if (!courseDetails) {
+        return res.status(400).json({
+          success: false,
+          message: `Could not find course with id: ${courseId}`,
+        })
+      }
   
-	  // if (courseDetails.status === "Draft") {
-	  //   return res.status(403).json({
-	  //     success: false,
-	  //     message: `Accessing a draft course is forbidden`,
-	  //   });
-	  // }
+      // if (courseDetails.status === "Draft") {
+      //   return res.status(403).json({
+      //     success: false,
+      //     message: `Accessing a draft course is forbidden`,
+      //   });
+      // }
   
-	  let totalDurationInSeconds = 0
-	  courseDetails.courseContent.forEach((content) => {
-		content.subSection.forEach((subSection) => {
-		  const timeDurationInSeconds = parseInt(subSection.timeDuration)
-		  totalDurationInSeconds += timeDurationInSeconds;
-		})
-	  })
+      let totalDurationInSeconds = 0
+      courseDetails.courseContent.forEach((content) => {
+        content.subSection.forEach((subSection) => {
+          const timeDurationInSeconds = parseInt(subSection.timeDuration)
+          totalDurationInSeconds += timeDurationInSeconds;
+        })
+      })
   
-	  const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+      const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
   
-	  return res.status(200).json({
-		success: true,
-		data: {
-		  courseDetails,
-		  totalDuration,
-		  
-		},
-	  })
-	} catch (error) {
-	  return res.status(500).json({
-		success: false,
-		message: error.message,
-	  })
-	}
+      return res.status(200).json({
+        success: true,
+        data: {
+          courseDetails,
+          totalDuration,
+          
+        },
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      })
+    }
   }
 

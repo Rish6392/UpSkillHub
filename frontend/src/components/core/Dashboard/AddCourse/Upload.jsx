@@ -26,6 +26,7 @@ export default function Upload({
     if (file) {
       previewFile(file);
       setSelectedFile(file);
+      setValue(name, file, { shouldValidate: true });
     }
   };
 
@@ -60,10 +61,14 @@ export default function Upload({
         {label} {!viewData && <sup className="text-pink-200">*</sup>}
       </label>
       <div
+        {...getRootProps()}
         className={`$ {
           isDragActive ? "bg-richblack-600" : "bg-richblack-700"
         } flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted border-richblack-500`}
       >
+        <input {...getInputProps()} 
+        // ref={inputRef}
+         />
         {previewSource ? (
           <div className="flex w-full flex-col p-6">
             {!video ? (
@@ -78,7 +83,8 @@ export default function Upload({
             {!viewData && (
               <button
                 type="button"
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   setPreviewSource("");
                   setSelectedFile(null);
                   setValue(name, null);
@@ -90,11 +96,7 @@ export default function Upload({
             )}
           </div>
         ) : (
-          <div
-            className="flex w-full flex-col items-center p-6"
-            {...getRootProps()}
-          >
-            <input {...getInputProps()} ref={inputRef} />
+          <div className="flex w-full flex-col items-center p-6">
             <div className="grid aspect-square w-14 place-items-center rounded-full bg-pure-greys-800">
               <FiUploadCloud className="text-2xl text-yellow-50" />
             </div>
