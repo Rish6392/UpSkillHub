@@ -39,7 +39,7 @@ const NestedView = ({ handleChangeEditSectionName }) => {
   const handleDeleteSubSection = async (subsectionId, sectionId) => {
     const result = await deleteSubSection(
       {
-        subsectionId,
+        subSectionId: subsectionId, // Fixed: backend expects subSectionId, not subsectionId
         sectionId,
       },
       token
@@ -101,13 +101,15 @@ const NestedView = ({ handleChangeEditSectionName }) => {
               {section?.subSection?.map((data) => (
                 <div
                   key={data?._id}
-                  onClick={() => {
-                    // console.log("data",data);
-                    setViewSubSection(data);
-                  }}
                   className="flex items-center justify-between gap-x-3 px-5 border-b-2 my-2"
                 >
-                  <div className="flex items-center gap-x3">
+                  <div 
+                    className="flex items-center gap-x3 cursor-pointer"
+                    onClick={() => {
+                      // console.log("data",data);
+                      setViewSubSection(data);
+                    }}
+                  >
                     <RxDropdownMenu />
                     <p>{data.title}</p>
                   </div>

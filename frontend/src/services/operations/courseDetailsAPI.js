@@ -200,7 +200,7 @@ export const updateSubSection = async (data, token) => {
   let result = null
   const toastId = toast.loading("Loading...")
   try {
-    const response = await apiConnector("POST", UPDATE_SUBSECTION_API, data, {
+    const response = await apiConnector("PUT", UPDATE_SUBSECTION_API, data, {
       Authorization: `Bearer ${token}`,
     })
     console.log("UPDATE SUB-SECTION API RESPONSE............", response)
@@ -208,7 +208,7 @@ export const updateSubSection = async (data, token) => {
       throw new Error("Could Not Update Lecture")
     }
     toast.success("Lecture Updated")
-    result = response?.data?.data
+    result = response?.data?.updatedSubSection // Backend returns updatedSubSection, not data
   } catch (error) {
     console.log("UPDATE SUB-SECTION API ERROR............", error)
     toast.error(error.message)
@@ -243,7 +243,7 @@ export const deleteSubSection = async (data, token) => {
   let result = null
   const toastId = toast.loading("Loading...")
   try {
-    const response = await apiConnector("POST", DELETE_SUBSECTION_API, data, {
+    const response = await apiConnector("DELETE", DELETE_SUBSECTION_API, data, {
       Authorization: `Bearer ${token}`,
     })
     console.log("DELETE SUB-SECTION API RESPONSE............", response)

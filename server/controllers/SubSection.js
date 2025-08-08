@@ -69,12 +69,12 @@ exports.createSubSection = async (req, res) => {
 exports.updateSubSection = async (req, res) => {
     try {
         //data input
-        const { subSectionId, title, timeDuartion, description } = req.body;
+        const { subSectionId, title, timeDuartion, description } = req.body; // Keep typo for now to match frontend
         //validation
-        if (!title || !subSectionId || !timeDuartion || !description) {
+        if (!title || !subSectionId || !description) {
             return res.status(400).json({
                 success: false,
-                message: "Missing Properties"
+                message: "Missing Properties: title, subSectionId, and description are required"
             });
         }
         // // If video is also being updated
@@ -84,8 +84,13 @@ exports.updateSubSection = async (req, res) => {
         //     updateData.videoUrl = uploadDetails.secure_url;
         // }
         //update data 
+        const updateData = { title, description };
+        if (timeDuartion) {
+            updateData.timeDuartion = timeDuartion; // Keep the typo for backward compatibility
+        }
+        
         const updatedSubSection = await SubSection.findByIdAndUpdate(subSectionId,
-            { title, timeDuartion, description },
+            updateData,
             { new: true },
         );
         // If subsection not found

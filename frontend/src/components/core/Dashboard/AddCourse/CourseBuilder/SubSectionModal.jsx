@@ -61,26 +61,33 @@ const SubSectionModal = ({
     const formData = new FormData();
 
     formData.append("sectionId", modalData.sectionId);
-    formData.append("subsectionId", modalData._id);
+    formData.append("subSectionId", modalData._id); // Changed from "subsectionId" to "subSectionId"
 
-    if (currentValues.lectureTitle !== modalData.title) {
-      formData.append("title", currentValues.lectureTitle);
-    }
+    // Backend requires ALL fields, so send current or updated values
+    formData.append("title", currentValues.lectureTitle || modalData.title);
+    formData.append("description", currentValues.description || modalData.description);
+    formData.append("timeDuartion", "00:05:00"); // Backend expects this field (note the typo)
 
-    if (currentValues.description !== modalData.description) {
-      formData.append("description", currentValues.description);
-    }
-
-    if (currentValues.lectureVideo !== modalData.videoUrl) {
-      formData.append("video", currentValues.lectureVideo);
-    }
+    // Video update is commented out in backend, so skip for now
+    // if (currentValues.lectureVideo !== modalData.videoUrl) {
+    //   formData.append("videoFile", currentValues.lectureVideo);
+    // }
 
     setLoading(true);
     const result = await updateSubSection(formData, token);
 
     if (result) {
-      const updatedCourseContent = course.courseContent.map((section)=> section._id === modalData.sectionId ? result : section);
-      const updatedCourse  = {...course,courseContent:updatedCourseContent}
+      // Update the specific subsection within the correct section
+      const updatedCourseContent = course.courseContent.map((section) => {
+        if (section._id === modalData.sectionId) {
+          const updatedSubSections = section.subSection.map((subSection) =>
+            subSection._id === modalData._id ? result : subSection
+          );
+          return { ...section, subSection: updatedSubSections };
+        }
+        return section;
+      });
+      const updatedCourse = { ...course, courseContent: updatedCourseContent };
       dispatch(setCourse(updatedCourse));
     }
 
@@ -113,10 +120,11 @@ const SubSectionModal = ({
       formData.append("sectionId", modalData);
       formData.append("title", data.lectureTitle);
       formData.append("description", data.description);
+      formData.append("timeDuration", "00:05:00"); // Default 5 minutes - you can make this dynamic later
       
       // Only append video if it exists and is a File object
       if (data.lectureVideo && data.lectureVideo instanceof File) {
-        formData.append("video", data.lectureVideo);
+        formData.append("videoFile", data.lectureVideo); // Changed from "video" to "videoFile"
       } else {
         toast.error("Please upload a lecture video.");
         setLoading(false);
@@ -146,9 +154,9 @@ const SubSectionModal = ({
 
   useOnClickOutside(ref,() => setModalData(null));
   return (
-    <div  onClick={(e) => {e.stopPropagation()}} >
+    <div onClick={(e) => {e.stopPropagation()}} >
       
-      <div className="absolute top-0 translate-y- left-1/4 w-1/2 z-50  bg-richblack-600 p-3  rounded-lg h-[calc(100vh-3.5rem)]  scrollbar-hide "
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] max-w-[90vw] z-50 bg-richblack-600 p-4 rounded-lg max-h-[80vh] scrollbar-hide"
       style={{
         scrollbarWidth: 'none',
         msOverflowStyle: 'none',
@@ -156,8 +164,8 @@ const SubSectionModal = ({
       
       ref={ref}>
         <div className="h-full overflow-y-auto">
-        <div className="bg-richblack-800 w-full py-2 px-4 rounded-lg flex justify-between mb-5">
-          <p className="text-xl ">
+        <div className="bg-richblack-800 w-full py-3 px-4 rounded-lg flex justify-between mb-4">
+          <p className="text-lg font-medium">
             {view && "Viewing"}
             {add && "Adding"}
             {edit && "Editing"} Lecture
@@ -165,12 +173,12 @@ const SubSectionModal = ({
           <button onClick={() => {
             !loading && setModalData(null)
           }}
-          className="bg-richblack-800 rounded-full aspect-square w-8 flex items-center justify-center"
+          className="bg-richblack-700 hover:bg-richblack-600 rounded-full aspect-square w-8 flex items-center justify-center transition-colors"
           >
             <RxCross2 />
           </button>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Upload
             title={"Course Video"}
             label={"lectureVideo"}
@@ -184,34 +192,34 @@ const SubSectionModal = ({
             editData={edit ? modalData.videoUrl : null}
           />
           <div>
-            <label htmlFor="lectureTitle" className="text-md text-richblack-5  ">Lecture Title<sup className="text-pink-200">*</sup></label>
+            <label htmlFor="lectureTitle" className="text-sm text-richblack-5 mb-1 block">Lecture Title<sup className="text-pink-200">*</sup></label>
             <input
               type="text"
               id="lectureTitle"
               placeholder="Enter lecture Title"
               {...register("lectureTitle", { required: true })}
-              className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5"
+              className="w-full rounded-[0.5rem] bg-richblack-800 p-3 text-richblack-5 text-sm"
             />
-            {errors.lectureTitle && <span>Lecture Title is required</span>}
+            {errors.lectureTitle && <span className="text-xs text-red-400">Lecture Title is required</span>}
           </div>
           <div>
-            <label htmlFor="description" className="text-md text-richblack-5 ">Lecture Description<sup className="text-pink-200">*</sup></label>
+            <label htmlFor="description" className="text-sm text-richblack-5 mb-1 block">Lecture Description<sup className="text-pink-200">*</sup></label>
             <textarea
               id="description"
               placeholder="Enter Description"
               {...register("description", { required: true })}
-              className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5 h-[140px]"
+              className="w-full rounded-[0.5rem] bg-richblack-800 p-3 text-richblack-5 text-sm h-[100px] resize-none"
             ></textarea>
             {errors.description && (
-              <span>Lecture description is required</span>
+              <span className="text-xs text-red-400">Lecture description is required</span>
             )}
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end pt-2">
           {!view && (
             <IconBtn
               disabled={loading}
               text={loading ? "Loading..." : edit ? "save changes" : "save"}
-              customClasses="w-fit mt-10 h-fit bg-yellow-50 border-2 border-yellow-200 text-black font-semibold rounded-lg py-2 px-4 flex items-center justify-center hover:bg-yellow-100 transition duration-300 hover:scale-95"
+              customClasses="w-fit bg-yellow-50 border-2 border-yellow-200 text-black font-semibold rounded-lg py-2 px-4 flex items-center justify-center hover:bg-yellow-100 transition duration-300 hover:scale-95 text-sm"
 
             />
           )}
