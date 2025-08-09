@@ -219,92 +219,126 @@ exports.deleteCourse = async (req, res) => {
         const { courseId } = req.body;
         const userId = req.user.id;
 
-        const courseDetails = await Course.findById(courseId).populate({
+        console.log("Deleting course with ID:", courseId);
+        console.log("User ID:", userId);
+
+        // First, find the course and verify it belongs to the instructor
+        const courseDetails = await Course.findById(courseId);
+        if (!courseDetails) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
+            });
+        }
+
+        if (courseDetails.instructor.toString() !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to delete this course",
+            });
+        }
+
+        // Populate course content to get all sections and subsections
+        const populatedCourse = await Course.findById(courseId).populate({
             path: "courseContent",
             populate: {
                 path: "subSection",
             },
         });
-        //console.log(courseDetails);
 
-        //fetch videoUrl of all subSection
-        let videoUrlArray = courseDetails.courseContent.flatMap((section) => {
-            section.subSection.map((subsec) => subsec.videoUrl)
-        });
-        console.log("videourlarray", videoUrlArray);
+        console.log("Course found, starting deletion process...");
 
-        //delete video from cloudinary
-        await deleteImage(videoUrlArray);
-
-        //remove course from instructions array
-        const userDetails = await User.findByIdAndUpdate(
-            { _id: userId },
-            {
-                $pull: {
-                    courses: courseId,
-                },
-            },
-            {
-                new: true,
-            }
-        );
-        console.log("userdetails", userDetails);
-
-        //fetch all sections of the course
-        const allSections = courseDetails.courseContent;
-
-        //delete all subsection from each section
-        for (let section of allSections) {
-            const result = await Subsection.deleteMany({
-                _id: { $in: section.subSection },
-            });
-
-            console.log("subsection delete result", result);
+        // Collect all video URLs for deletion from cloudinary
+        let videoUrlArray = [];
+        if (populatedCourse.courseContent && populatedCourse.courseContent.length > 0) {
+            videoUrlArray = populatedCourse.courseContent.flatMap((section) => 
+                section.subSection ? section.subSection.map((subsec) => subsec.videoUrl).filter(url => url) : []
+            );
         }
 
-        //delete all sections
-        await Section.deleteMany({ _id: { $in: allSections } });
-        console.log("section delete result");
+        console.log("Video URLs to delete:", videoUrlArray);
 
-        //rating and review me se sare rating hatane h
-        // delete all of the rating and reviews of the course
-        await RatingAndReview.deleteMany({ course: courseDetails._id });
+        // Delete videos from cloudinary (if any)
+        if (videoUrlArray.length > 0) {
+            try {
+                await deleteImage(videoUrlArray);
+                console.log("Videos deleted from cloudinary");
+            } catch (error) {
+                console.log("Error deleting videos from cloudinary:", error);
+                // Continue with deletion even if cloudinary deletion fails
+            }
+        }
 
-        // console.log("rating and review result",ratingandReviewResult);
+        // Delete course thumbnail from cloudinary
+        if (populatedCourse.thumbnail) {
+            try {
+                await deleteImages([populatedCourse.thumbnail]);
+                console.log("Thumbnail deleted from cloudinary");
+            } catch (error) {
+                console.log("Error deleting thumbnail from cloudinary:", error);
+                // Continue with deletion even if cloudinary deletion fails
+            }
+        }
 
-        // delete course thumbnail
-        await deleteImages([courseDetails.thumbnail]);
+        // Delete all subsections
+        const allSections = populatedCourse.courseContent || [];
+        for (let section of allSections) {
+            if (section.subSection && section.subSection.length > 0) {
+                const subsectionIds = section.subSection.map(subsec => subsec._id);
+                await Subsection.deleteMany({ _id: { $in: subsectionIds } });
+                console.log(`Deleted ${subsectionIds.length} subsections from section ${section._id}`);
+            }
+        }
 
-        //remove this course from corresponding course
-        await category.findByIdAndUpdate(
-            { _id: courseDetails.category },
-            { $pull: { course: courseDetails._id } }
+        // Delete all sections
+        if (allSections.length > 0) {
+            const sectionIds = allSections.map(section => section._id);
+            await Section.deleteMany({ _id: { $in: sectionIds } });
+            console.log(`Deleted ${sectionIds.length} sections`);
+        }
+
+        // Delete all ratings and reviews of the course
+        await RatingAndReview.deleteMany({ course: courseId });
+        console.log("Deleted all ratings and reviews");
+
+        // Remove course from instructor's courses array
+        await User.findByIdAndUpdate(
+            userId,
+            { $pull: { courses: courseId } },
+            { new: true }
         );
+        console.log("Removed course from instructor's courses");
 
-        //delete the course progress
-        await courseProgress.deleteOne({ courseId: courseID });//
+        // Remove course from category
+        if (populatedCourse.category) {
+            await Category.findByIdAndUpdate(
+                populatedCourse.category,
+                { $pull: { course: courseId } },
+                { new: true }
+            );
+            console.log("Removed course from category");
+        }
 
-        //return the remaining courses to the user
-        const allCourses = await Course.find({ instructor: userId })
-            .populate({
-                path: "courseContent",
-                populate: {
-                    path: "subSection",
-                },
-            })
-            .exec();
+        // Delete course progress records
+        await courseProgress.deleteMany({ courseId: courseId });
+        console.log("Deleted course progress records");
 
+        // Finally, delete the course itself
+        await Course.findByIdAndDelete(courseId);
+        console.log("Course deleted successfully");
+
+        // Return success response
         return res.status(200).json({
             success: true,
-            data: allCourses,
+            message: "Course deleted successfully",
         });
 
-    }
-    catch (error) {
-        console.log(error);
+    } catch (error) {
+        console.log("Error in deleteCourse:", error);
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to delete course",
+            error: error.message,
         });
     }
 }
@@ -313,7 +347,6 @@ exports.deleteCourse = async (req, res) => {
 
 exports.showAllCourses = async (req, res) => {
     try {
-        tally
         // TODO: change te below statement incrementally
         const allCourses = await Course.find(
             {},

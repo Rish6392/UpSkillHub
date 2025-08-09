@@ -25,7 +25,7 @@ const {createRating,getAverageRating,getAllRating} = require('../controllers/Rat
 router.get("/instructorCourses",auth,isInstructor,fetchInstructorCourses);
 router.post("/createCourse", auth, isInstructor, createCourse);
 router.post("/editCourse",auth,isInstructor,updateCourse)
-router.post("/deleteCourse",auth,isInstructor,deleteCourse)
+router.delete("/deleteCourse",auth,isInstructor,deleteCourse)
 router.post("/updateCourseProgress",auth,isStudent,updateCourseProgress);
 
 router.get("/getAllCourses",showAllCourses);
