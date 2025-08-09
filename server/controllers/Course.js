@@ -169,7 +169,7 @@ exports.updateCourse = async (req, res) => {
         }
 
         for (key in updates) {
-            if (updates.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(updates, key)) {
                 if (key === "tag" || key === "instructions") {
                     course[key] = JSON.parse(updates[key]);
                 }
@@ -189,7 +189,7 @@ exports.updateCourse = async (req, res) => {
                 },
             })
             .populate("category")
-            .populate("ratingAndReview")
+            .populate("ratingAndReviews")
             .populate({
                 path: "courseContent",
                 populate: {

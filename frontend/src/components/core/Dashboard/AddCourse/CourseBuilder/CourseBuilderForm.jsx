@@ -42,22 +42,21 @@ const CourseBuilderForm = () => {
   };
 
   const goToNext = () => {
-    console.log(course);
     if (!course?.courseContent || course.courseContent.length === 0) {
       toast.error("Please add atleast one section");
-      // console.log("error k andr")
       return;
     }
 
-    if (
-      course?.courseContent?.some((section) => section.subSection.length === 0)
-    ) {
-      toast.error("Please add atleast one lecture in each subsection");
-      // console.log("dusre error k andr")
+    // Check each section for subsections
+    const sectionsWithoutLectures = course.courseContent.filter(
+      (section) => !section.subSection || section.subSection.length === 0
+    );
+    
+    if (sectionsWithoutLectures.length > 0) {
+      toast.error("Please add atleast one lecture in each section");
       return;
     }
 
-    console.log("yaha to aa hi gye")
     dispatch(setStep(3));
   };
 
@@ -167,13 +166,13 @@ const CourseBuilderForm = () => {
           <FaAngleLeft className="text-sm" />
           <span className="text-sm">Back</span>
         </button>
-        <IconBtn
-          text="Next"
+        <button
           onClick={goToNext}
-          customClasses="w-fit h-fit bg-yellow-50 border-2 border-yellow-200 text-black  rounded-lg py-2 px-4 flex items-center justify-center hover:bg-yellow-100 transition duration-300 gap-1 text-sm"
+          className="w-fit h-fit bg-yellow-50 border-2 border-yellow-200 text-black rounded-lg py-2 px-4 flex items-center justify-center hover:bg-yellow-100 transition duration-300 gap-1 text-sm"
         >
+          <span>Next</span>
           <FaAngleRight className="text-sm" />
-        </IconBtn>
+        </button>
       </div>
     </div>
   );
