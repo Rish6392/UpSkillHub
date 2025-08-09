@@ -42,9 +42,15 @@ export default function CourseInformationForm() {
       }
       setLoading(false)
     }
-    // if form is in edit mode
-    if (editCourse) {
-      // console.log("data populated", editCourse)
+
+    getCategories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Separate useEffect for setting form values when in edit mode
+  useEffect(() => {
+    if (editCourse && course) {
+      console.log("Populating form with course data:", course)
       setValue("courseTitle", course.courseName)
       setValue("courseShortDesc", course.courseDescription)
       setValue("coursePrice", course.price)
@@ -54,10 +60,7 @@ export default function CourseInformationForm() {
       setValue("courseRequirements", course.instructions)
       setValue("courseImage", course.thumbnail)
     }
-    getCategories()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [editCourse, course, setValue])
 
   const isFormUpdated = () => {
     const currentValues = getValues()
