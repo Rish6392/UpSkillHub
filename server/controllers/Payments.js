@@ -18,9 +18,7 @@ exports.capturePayment = async (req, res) => {
     console.log(courses);
     const userId = req.user.id;
     //validation
-    // validation
-    if (courses.length
-      === 0) {
+    if (courses.length === 0) {
       return res.json({
         success: false,
         message: "Please provide valid course ID",
@@ -63,7 +61,7 @@ exports.capturePayment = async (req, res) => {
     }
 
 
-    //order create
+    
 
     // order create
     const currency = "INR";
