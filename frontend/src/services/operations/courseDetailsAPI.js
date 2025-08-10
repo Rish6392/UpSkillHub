@@ -57,8 +57,9 @@ export const fetchCourseDetails = async (courseId) => {
     result = response.data
   } catch (error) {
     console.log("COURSE_DETAILS_API API ERROR............", error)
-    result = error.response.data
-    // toast.error(error.response.data.message);
+    // Show error toast
+    toast.error("Failed to load course details")
+    result = { success: false, message: error.message }
   }
   toast.dismiss(toastId)
   //   dispatch(setLoading(false));
