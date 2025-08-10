@@ -21,8 +21,20 @@ const Catalog = () => {
     useEffect(()=> {
         const getCategories = async() => {
             const res = await apiConnector("GET", categories.CATEGORIES_API);
+            console.log("All categories:", res?.data?.data);
+            console.log("Looking for category name:", catalogName);
+            
             const category_id = 
-            res?.data?.data?.filter((ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName)[0]._id;
+            res?.data?.data?.filter((ct) => 
+                ct.name
+                  .split(" ")
+                  .join("-")
+                  .split("/")
+                  .join("-")
+                  .toLowerCase() === catalogName
+            )[0]?._id;
+            
+            console.log("Found category ID:", category_id);
             setCategoryId(category_id);
         }
         getCategories();
@@ -32,11 +44,11 @@ const Catalog = () => {
         const getCategoryDetails = async() => {
             try{
                 const res = await getCatalogaPageData(categoryId);
-                console.log("PRinting res: ", res);
+                console.log("Catalog page data:", res);
                 setCatalogPageData(res);
             }
             catch(error) {
-                console.log(error)
+                console.log("Error fetching catalog data:", error)
             }
         }
         if(categoryId) {
@@ -53,7 +65,9 @@ const Catalog = () => {
           </div>
         )
       }
-      if (!loading && !catalogPageData.success) {
+      
+      // Show error page only for actual errors, not for empty categories
+      if (!loading && !catalogPageData.success && !catalogPageData.message?.includes("No courses found")) {
         return <Error />
       }
     
@@ -65,14 +79,14 @@ const Catalog = () => {
               <p className="text-sm text-richblack-300">
                 {`Home / Catalog / `}
                 <span className="text-yellow-25">
-                  {catalogPageData?.data?.selectedCategory?.name}
+                  {catalogPageData?.selectedCategory?.name}
                 </span>
               </p>
               <p className="text-3xl text-richblack-5">
-                {catalogPageData?.data?.selectedCategory?.name}
+                {catalogPageData?.selectedCategory?.name}
               </p>
               <p className="max-w-[870px] text-richblack-200">
-                {catalogPageData?.data?.selectedCategory?.description}
+                {catalogPageData?.selectedCategory?.description}
               </p>
             </div>
           </div>
@@ -104,18 +118,18 @@ const Catalog = () => {
             </div>
             <div>
               <CourseSlider
-                Courses={catalogPageData?.data?.selectedCategory?.courses}
+                Courses={catalogPageData?.selectedCourses}
               />
             </div>
           </div>
           {/* Section 2 */}
           <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
             <div className="section_heading">
-              Top courses in {catalogPageData?.data?.differentCategory?.name}
+              Top courses in other categories
             </div>
             <div className="py-8">
               <CourseSlider
-                Courses={catalogPageData?.data?.differentCategory?.courses}
+                Courses={catalogPageData?.differentCourses}
               />
             </div>
           </div>
@@ -125,7 +139,7 @@ const Catalog = () => {
             <div className="section_heading">Frequently Bought</div>
             <div className="py-8">
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {catalogPageData?.data?.mostSellingCourses
+                {catalogPageData?.mostSellingCourses
                   ?.slice(0, 4)
                   .map((course, i) => (
                     <Course_Card course={course} key={i} Height={"h-[400px]"} />

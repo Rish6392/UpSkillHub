@@ -100,6 +100,8 @@ const Navbar = () => {
                             to={`/catalog/${sublink?.name
                               .split(" ")
                               .join("-")
+                              .split("/")
+                              .join("-")
                               .toLowerCase()}`}
                             key={index}
                             className="block h-fit px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 hover:bg-richblack-50 "
