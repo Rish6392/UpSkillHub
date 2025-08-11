@@ -33,7 +33,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
       return
     }
     if (token) {
-      dispatch(addToCart(course))
+      dispatch(addToCart(course))   // write the function
       return
     }
     setConfirmationModal({
