@@ -7,11 +7,11 @@ const {capturePayment,verifySignature,
     = require("../controllers/Payments");
 
 //
-router.post('/capturepayment',auth,isStudent,capturePayment)
-router.post('/verifysignature',auth,isStudent,verifySignature)
+router.post('/capturePayment',auth,isStudent,capturePayment)
+router.post('/verifyPayment',auth,isStudent,verifySignature)
 
 
-router.post('sendpaymentsuccessemail',auth,isStudent,sendPaymentSuccessEmail)
+router.post('/sendPaymentSuccessEmail',auth,isStudent,sendPaymentSuccessEmail)
 
 
 module.exports = router
