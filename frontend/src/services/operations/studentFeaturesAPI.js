@@ -27,6 +27,21 @@ function loadScript(src) {
 export async function buyCourse(token, courses, userDetails, navigate, dispatch) {
     const toastId = toast.loading("Loading...");
     try{
+        // Check if token exists
+        if (!token) {
+            toast.error("Please login to continue");
+            navigate("/login");
+            return;
+        }
+
+        // Check if courses array is empty
+        if (!courses || courses.length === 0) {
+            toast.error("No courses selected for purchase");
+            return;
+        }
+
+        console.log("Attempting to buy courses:", courses);
+
         //load the script
         const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
@@ -77,7 +92,21 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
     }
     catch(error) {
         console.log("PAYMENT API ERROR.....", error);
-        toast.error("Could not make Payment");
+        
+        // Handle specific error cases
+        if (error.message === "Student is already enrolled") {
+            toast.error("You are already enrolled in one or more of these courses. Please check your enrolled courses.");
+            navigate("/dashboard/enrolled-courses");
+        } else if (error.response?.status === 401) {
+            toast.error("Session expired. Please login again.");
+            navigate("/login");
+        } else if (error.response?.data?.message) {
+            toast.error(error.response.data.message);
+        } else if (error.message) {
+            toast.error(error.message);
+        } else {
+            toast.error("Could not make Payment");
+        }
     }
     toast.dismiss(toastId);
 }
