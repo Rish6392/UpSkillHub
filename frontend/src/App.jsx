@@ -27,6 +27,10 @@ import EditCourse from "./components/core/Dashboard/EditCourse/index.jsx";
 import MyCourses from "./components/core/Dashboard/MyCourses.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import CourseDetails from "./pages/CourseDetails.jsx";
+import ViewCourse from "./pages/ViewCourse.jsx";
+import VideoDetails from "./components/core/ViewCourse/VideoDetails.jsx";
+import CourseReviewModal from "./components/core/ViewCourse/CourseReviewModal.jsx";
+
 
 function App() {
 
