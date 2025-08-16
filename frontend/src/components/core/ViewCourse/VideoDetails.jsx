@@ -195,8 +195,9 @@ const VideoDetails = () => {
           aspectRatio="16:9"
           playsInline
           onEnded={() => setVideoEnded(true)}
-          src={videoData?.videoUrl}
+          src={videoData?.video || videoData?.videoUrl}
           onError={() => {
+            console.error("Video failed to load. Video data:", videoData);
             toast.error("Video not able to play")
           }}
         >

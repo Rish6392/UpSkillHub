@@ -34,11 +34,11 @@ const SubSectionModal = ({
   const { token } = useSelector((state) => state.auth);
   const ref = useRef(null);
   useEffect(() => {
-    console.log("inside subsection module");
+    console.log("inside subsection modal");
     if (view || edit) {
       setValue("lectureTitle", modalData.title);
       setValue("description", modalData.description);
-      setValue("lectureVideo", modalData.videoUrl);
+      setValue("lectureVideo", modalData.video || modalData.videoUrl);
     }
   }, []);
 
@@ -47,7 +47,7 @@ const SubSectionModal = ({
     if (
       currentValues.lectureTitle !== modalData.title ||
       currentValues.description !== modalData.description ||
-      currentValues.lectureVideo !== modalData.videoUrl
+      currentValues.lectureVideo !== (modalData.video || modalData.videoUrl)
     ) {
       return true;
     } else {
@@ -97,11 +97,11 @@ const SubSectionModal = ({
   };
 
   const onSubmit = async (data) => {
+    console.log("Form submission data:", data);
+    
     if (view) {
       return;
     }
-
-    //edit
 
     if (edit) {
       if (!isFormUpdated()) {
@@ -112,23 +112,59 @@ const SubSectionModal = ({
       return;
     }
 
-    //Add
-
     if (add) {
-      const formData = new FormData();
+      // Validate required fields
+      if (!data.lectureTitle || !data.description) {
+        toast.error("Please fill all required fields");
+        return;
+      }
 
+      // Validate video upload
+      if (!data.lectureVideo) {
+        toast.error("Please upload a lecture video");
+        return;
+      }
+
+      if (!(data.lectureVideo instanceof File)) {
+        toast.error("Invalid video file. Please upload a valid video.");
+        return;
+      }
+
+      // Check video file type
+      const allowedTypes = ['video/mp4', 'video/avi', 'video/mov', 'video/wmv'];
+      if (!allowedTypes.includes(data.lectureVideo.type)) {
+        toast.error("Please upload a valid video file (MP4, AVI, MOV, WMV)");
+        return;
+      }
+
+      // Check file size (100MB limit)
+      const maxSize = 100 * 1024 * 1024; // 100MB
+      if (data.lectureVideo.size > maxSize) {
+        toast.error("Video file size should be less than 100MB");
+        return;
+      }
+
+      const formData = new FormData();
       formData.append("sectionId", modalData);
       formData.append("title", data.lectureTitle);
       formData.append("description", data.description);
-      formData.append("timeDuration", "00:05:00"); // Default 5 minutes - you can make this dynamic later
+      formData.append("timeDuration", "00:05:00");
+      formData.append("videoFile", data.lectureVideo);
       
-      // Only append video if it exists and is a File object
-      if (data.lectureVideo && data.lectureVideo instanceof File) {
-        formData.append("videoFile", data.lectureVideo); // Changed from "video" to "videoFile"
-      } else {
-        toast.error("Please upload a lecture video.");
-        setLoading(false);
-        return;
+      console.log("=== FRONTEND DEBUG ===");
+      console.log("Modal data (sectionId):", modalData);
+      console.log("Form data object:", data);
+      console.log("Video file details:", {
+        name: data.lectureVideo.name,
+        size: data.lectureVideo.size,
+        type: data.lectureVideo.type,
+        lastModified: data.lectureVideo.lastModified
+      });
+      
+      // Log FormData contents
+      console.log("FormData contents:");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
       }
       
       setLoading(true);
@@ -143,6 +179,9 @@ const SubSectionModal = ({
           courseContent: updatedCourseContent,
         };
         dispatch(setCourse(updatedCourse));
+        toast.success("Lecture added successfully!");
+      } else {
+        toast.error("Failed to add lecture. Please try again.");
       }
 
       setModalData(null);

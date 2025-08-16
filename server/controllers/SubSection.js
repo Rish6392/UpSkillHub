@@ -8,15 +8,30 @@ const { uploadVideoToCloudinary } = require("../utils/imageUploader");
 
 exports.createSubSection = async (req, res) => {
     try {
+        console.log("=== CREATE SUBSECTION DEBUG ===");
+        console.log("Request body:", req.body);
+        console.log("Request files:", req.files);
+        console.log("Request headers:", req.headers);
+        
         //fetch data from Req body
-        const { sectionId, title, description,timeDuration } = req.body;
-        //extract file/vodeo
-        const video = req.files.videoFile;
+        const { sectionId, title, description, timeDuration } = req.body;
+        //extract file/video
+        const video = req.files?.videoFile;
+        
+        console.log("Extracted data:", { sectionId, title, description, timeDuration });
+        console.log("Video file:", video);
+        
         //validation
-        if (!sectionId || !title || !description || !video || !timeDuration) {
+        if (!sectionId || !title || !description || !video) {
+            console.log("Validation failed:", {
+                sectionId: !!sectionId,
+                title: !!title, 
+                description: !!description,
+                video: !!video
+            });
             return res.status(400).json({
                 success: false,
-                message: "Fill All fields"
+                message: "All fields are required: sectionId, title, description, and video file"
             })
         }
 
@@ -25,21 +40,33 @@ exports.createSubSection = async (req, res) => {
         if (!sectionDetails) {
             return res.status(404).json({
                 success: false,
-                message: "This Section doesn't exits",
+                message: "This Section doesn't exist",
             });
         }
-        //uplaod video to cloudinary
-        const uploadDetails = await uploadVideoToCloudinary(video, process.env.FOLDER_NAME)
-        console.log("Upload Details",uploadDetails)
+
+        //upload video to cloudinary
+        console.log("Uploading video to Cloudinary...");
+        const uploadDetails = await uploadVideoToCloudinary(video, process.env.FOLDER_NAME);
+        console.log("Upload Details:", uploadDetails);
+
+        if (!uploadDetails || !uploadDetails.secure_url) {
+            return res.status(500).json({
+                success: false,
+                message: "Failed to upload video to cloud storage"
+            });
+        }
+
         //create a subsection
         const subSectionDetails = await SubSection.create({
             title,
-            timeDuration,
+            timeDuration: timeDuration || "00:05:00",
             description,
             video: uploadDetails.secure_url,
-        })
+        });
+
         //update section with this sub section object id
-        const updatedSection = await Section.findByIdAndUpdate({ _id: sectionId },
+        const updatedSection = await Section.findByIdAndUpdate(
+            { _id: sectionId },
             {
                 $push: {
                     subSection: subSectionDetails._id,
@@ -47,7 +74,7 @@ exports.createSubSection = async (req, res) => {
             },
             { new: true }
         ).populate("subSection");
-        //HW : log updated section here,after adding populated query 
+
         //return response
         return res.status(200).json({
             success: true,
@@ -56,6 +83,7 @@ exports.createSubSection = async (req, res) => {
         });
     }
     catch (error) {
+        console.error("Error creating subsection:", error);
         return res.status(500).json({
             success: false,
             message: "Internal server error",

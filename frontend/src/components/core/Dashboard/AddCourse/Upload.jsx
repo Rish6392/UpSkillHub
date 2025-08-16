@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { FiUploadCloud } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import ReactPlayer from "react-player";
+import toast from "react-hot-toast";
 
 export default function Upload({
   name,
@@ -19,22 +20,60 @@ export default function Upload({
   const [previewSource, setPreviewSource] = useState(
     viewData ? viewData : editData ? editData : ""
   );
+  const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef(null);
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
+    console.log("File dropped:", file);
+    
     if (file) {
-      previewFile(file);
-      setSelectedFile(file);
-      setValue(name, file, { shouldValidate: true });
+      // Check file size for videos (limit to 100MB)
+      if (video && file.size > 100 * 1024 * 1024) {
+        toast.error("Video file size should be less than 100MB");
+        return;
+      }
+      
+      // Check file type
+      if (video) {
+        const allowedTypes = ['video/mp4', 'video/avi', 'video/mov', 'video/wmv'];
+        if (!allowedTypes.includes(file.type)) {
+          toast.error("Please upload a valid video file (MP4, AVI, MOV, WMV)");
+          return;
+        }
+      }
+      
+      setIsUploading(true);
+      
+      try {
+        previewFile(file);
+        setSelectedFile(file);
+        setValue(name, file, { shouldValidate: true });
+        toast.success(`${video ? 'Video' : 'Image'} uploaded successfully`);
+        console.log("File set successfully:", file.name);
+      } catch (error) {
+        console.error("Error processing file:", error);
+        toast.error("Error processing file. Please try again.");
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: !video
       ? { "image/*": [".jpeg", ".jpg", ".png"] }
-      : { "video/*": [".mp4"] },
+      : { "video/*": [".mp4", ".avi", ".mov", ".wmv"] },
     onDrop,
+    maxSize: video ? 100 * 1024 * 1024 : 5 * 1024 * 1024, // 100MB for videos, 5MB for images
+    onDropRejected: (rejectedFiles) => {
+      const rejection = rejectedFiles[0];
+      if (rejection.errors[0].code === 'file-too-large') {
+        toast.error(`File is too large. Maximum size is ${video ? '100MB' : '5MB'}`);
+      } else if (rejection.errors[0].code === 'file-invalid-type') {
+        toast.error(`Invalid file type. Please upload a ${video ? 'video' : 'image'} file.`);
+      }
+    }
   });
 
   const previewFile = (file) => {
@@ -78,7 +117,23 @@ export default function Upload({
                 className="h-full w-full rounded-md object-cover"
               />
             ) : (
-              <ReactPlayer url={previewSource} controls width="100%" height="100%" />
+              <div className="relative">
+                <ReactPlayer 
+                  url={previewSource} 
+                  controls 
+                  width="100%" 
+                  height="300px"
+                  onError={(error) => {
+                    console.error("Video preview error:", error);
+                    toast.error("Error loading video preview");
+                  }}
+                />
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="text-white">Processing video...</div>
+                  </div>
+                )}
+              </div>
             )}
             {!viewData && (
               <button
@@ -88,6 +143,7 @@ export default function Upload({
                   setPreviewSource("");
                   setSelectedFile(null);
                   setValue(name, null);
+                  console.log("Upload cancelled for:", name);
                 }}
                 className="mt-3 text-richblack-400 underline"
               >
@@ -106,8 +162,19 @@ export default function Upload({
               file
             </p>
             <ul className="mt-10 flex list-disc justify-between space-x-12 text-center  text-xs text-richblack-200">
-              <li>Aspect ratio 16:9</li>
-              <li>Recommended size 1024x576</li>
+              {!video ? (
+                <>
+                  <li>Aspect ratio 16:9</li>
+                  <li>Recommended size 1024x576</li>
+                  <li>Max size: 5MB</li>
+                </>
+              ) : (
+                <>
+                  <li>Formats: MP4, AVI, MOV, WMV</li>
+                  <li>Max size: 100MB</li>
+                  <li>Recommended: MP4</li>
+                </>
+              )}
             </ul>
           </div>
         )}
