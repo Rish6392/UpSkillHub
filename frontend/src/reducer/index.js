@@ -1,18 +1,20 @@
 
 //This is the root reducer, used to combine multiple reducers into one.
 
-import {combineReducers} from "@reduxjs/toolkit";  // Merges multiple reducers into a single one.
-import authReducer from "../slices/authSlice"   //  You define a slice of state called auth that is managed by authReducer.
-import profileReducer from "../slices/profileSlice"
+import {combineReducers} from "@reduxjs/toolkit";
+
+import authReducer from "../slices/authSlice"
+import profileReducer from "../slices/profileSlice";
 import cartReducer from "../slices/cartSlice"
-import courseReducer from "../slices/courseSlice" // This slice manages the state related to courses, such as adding, updating, and deleting courses.
+import courseReducer from "../slices/courseSlice"
+import viewCourseReducer from "../slices/viewCourseSlice"
 
-
-const rootReducer = combineReducers({
-  auth:authReducer,
-  profile:profileReducer,
-  cart:cartReducer,
-  course:courseReducer,
+const rootReducer  = combineReducers({
+    auth: authReducer,
+    profile:profileReducer,
+    cart:cartReducer,
+    course:courseReducer,
+    viewCourse:viewCourseReducer,
 })
 
 export default rootReducer;

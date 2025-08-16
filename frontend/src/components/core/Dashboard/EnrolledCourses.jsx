@@ -1,12 +1,14 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getUserEnrolledCourses } from '../../../services/operations/profileAPI';
 import ProgressBar from '@ramonak/react-progress-bar';
 
 const EnrolledCourses = () => {
 
   const {token} = useSelector((state) => state.auth)
+  const navigate = useNavigate();
   const [enrolledCourses,setEnrolledCourses] = useState(null);
 
   const getEnrolledCourses = async()=>{
@@ -17,6 +19,11 @@ const EnrolledCourses = () => {
     catch(error){
         console.log("Unable to fetch enrolled Courses");
     }
+  }
+
+  const handleCourseClick = (course) => {
+    // Navigate to view course page with the course ID
+    navigate(`/view-course/${course._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`);
   }
 
 
@@ -55,7 +62,10 @@ const EnrolledCourses = () => {
                                 }`}
                                 key={index}
                             >
-                                <div className="flex w-[45%] cursor-pointer items-center gap-4 px-5 py-3">
+                                <div 
+                                    className="flex w-[45%] cursor-pointer items-center gap-4 px-5 py-3"
+                                    onClick={() => handleCourseClick(course)}
+                                >
                                     <img
                                         src={course.thumbnail}
                                         alt="course_img"
