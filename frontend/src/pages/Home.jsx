@@ -8,7 +8,7 @@ import CodeBlocks from '../components/core/HomePage/CodeBlocks.jsx';
 import TimelineSection from '../components/core/HomePage/TimelineSection.jsx';
 import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection.jsx';
 import InstructorSection from '../components/core/HomePage/InstructorSection.jsx';
-import ReviewSlider from '../components/core/HomePage/ReviewSlider.jsx';
+import ReviewSlider from '../components/common/ReviewSlider.jsx';
 import Footer from '../components/common/Footer';
 import ExploreMore from '../components/core/HomePage/ExploreMore.jsx';
 
