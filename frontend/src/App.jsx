@@ -30,6 +30,7 @@ import CourseDetails from "./pages/CourseDetails.jsx";
 import ViewCourse from "./pages/ViewCourse.jsx";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails.jsx";
 import CourseReviewModal from "./components/core/ViewCourse/CourseReviewModal.jsx";
+import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor.jsx";
 
 
 function App() {
@@ -114,6 +115,7 @@ function App() {
 
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
             <>
+              <Route path="dashboard/instructor" element={<Instructor />} />
               <Route path="dashboard/add-course" element={<AddCourse />} />
               <Route path="dashboard/edit-course/:courseId" element={<EditCourse />} />
               <Route path="dashboard/my-courses" element={<MyCourses />} />

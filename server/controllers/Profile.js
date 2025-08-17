@@ -312,7 +312,7 @@ exports.instructorDashboard = async(req,res) => {
 
       const courseDataWithStats = {
         _id:course._id,
-        courseName: course.name,
+        courseName: course.courseName,
         courseDescription: course.courseDescription,
         totalStudentsEnrolled,
         totalAmountGenerated,
