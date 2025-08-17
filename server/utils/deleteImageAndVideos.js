@@ -35,7 +35,7 @@ const getPublicIdsFromUrls = (imageUrlArray) => {
 };
 
 
-// Function to delete multiple images from Cloudinary
+// Function to delete multiple Images from Cloudinary
 exports.deleteImages = async (imageUrlArray) => {
   try {
     const publicIds = getPublicIdsFromUrls(imageUrlArray);
@@ -59,6 +59,6 @@ exports.deleteImages = async (imageUrlArray) => {
     console.log('Delete result:', result2);
     return result;
   } catch (error) {
-    console.error('Error deleting images:', error);
+    console.error('Error deleting Images:', error);
   }
 };

@@ -65,7 +65,7 @@ export default function Upload({
       ? { "image/*": [".jpeg", ".jpg", ".png"] }
       : { "video/*": [".mp4", ".avi", ".mov", ".wmv"] },
     onDrop,
-    maxSize: video ? 100 * 1024 * 1024 : 5 * 1024 * 1024, // 100MB for videos, 5MB for images
+    maxSize: video ? 100 * 1024 * 1024 : 5 * 1024 * 1024, // 100MB for videos, 5MB for Images
     onDropRejected: (rejectedFiles) => {
       const rejection = rejectedFiles[0];
       if (rejection.errors[0].code === 'file-too-large') {

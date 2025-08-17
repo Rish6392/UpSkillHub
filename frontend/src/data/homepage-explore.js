@@ -4,7 +4,7 @@ export const HomePageExplore = [
         courses : [
             {
                 heading : "Learn HTML",
-                description : "This course covers the basic concepts of HTML including creating and structuring web pages, adding text, links, images, and more.",
+                description : "This course covers the basic concepts of HTML including creating and structuring web pages, adding text, links, Images, and more.",
                 level : 'Beginner',
                 lessionNumber : 6
             },
