@@ -2,7 +2,7 @@ import React from "react"
 import Footer from "../components/common/Footer"
 import ContactDetails from "../components/ContactPage/ContactDetails"
 import ContactForm from "../components/ContactPage/ContactForm"
-//import ReviewSlider from "../components/common/ReviewSlider"
+import ReviewSlider from '../components/common/ReviewSlider.jsx';
 
 const Contact = () => {
   return (
@@ -23,7 +23,7 @@ const Contact = () => {
         <h1 className="text-center text-4xl font-semibold mt-8">
           Happy & Satisfied Learners!
         </h1>
-        {/* <ReviewSlider /> */}
+        <ReviewSlider />
       </div>
       <Footer />
     </div>
