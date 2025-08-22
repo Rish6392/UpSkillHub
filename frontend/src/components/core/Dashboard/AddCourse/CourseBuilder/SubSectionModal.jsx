@@ -176,21 +176,21 @@ export default function SubSectionModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[1000] !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
-      <div className="my-10 w-11/12 max-w-[700px] rounded-lg border border-richblack-400 bg-richblack-800">
+    <div className="fixed inset-0 z-[1000] !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm p-4">
+      <div className="my-4 w-full max-w-[700px] mx-auto rounded-lg border border-richblack-400 bg-richblack-800 max-h-[90vh] overflow-y-auto">
         {/* Modal Header */}
-        <div className="flex items-center justify-between rounded-t-lg bg-richblack-700 p-5">
-          <p className="text-xl font-semibold text-richblack-5">
+        <div className="flex items-center justify-between rounded-t-lg bg-richblack-700 p-3 sm:p-5 sticky top-0 z-10">
+          <p className="text-lg sm:text-xl font-semibold text-richblack-5">
             {view && "Viewing"} {add && "Adding"} {edit && "Editing"} Lecture
           </p>
-          <button onClick={() => (!loading ? setModalData(null) : {})}>
-            <RxCross2 className="text-2xl text-richblack-5" />
+          <button onClick={() => (!loading ? setModalData(null) : {})} className="p-1">
+            <RxCross2 className="text-xl sm:text-2xl text-richblack-5" />
           </button>
         </div>
         {/* Modal Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-8 px-8 py-10"
+          className="space-y-6 sm:space-y-8 px-4 sm:px-8 py-6 sm:py-10"
         >
           {/* Lecture Video Upload */}
           <Upload
@@ -213,7 +213,7 @@ export default function SubSectionModal({
               id="lectureTitle"
               placeholder="Enter Lecture Title"
               {...register("lectureTitle", { required: true })}
-              className="form-style w-full"
+              className="form-style w-full text-sm sm:text-base"
             />
             {errors.lectureTitle && (
               <span className="ml-2 text-xs tracking-wide text-pink-200">
@@ -232,7 +232,7 @@ export default function SubSectionModal({
               id="lectureDesc"
               placeholder="Enter Lecture Description"
               {...register("lectureDesc", { required: true })}
-              className="form-style resize-x-none min-h-[130px] w-full"
+              className="form-style resize-none min-h-[100px] sm:min-h-[130px] w-full text-sm sm:text-base"
             />
             {errors.lectureDesc && (
               <span className="ml-2 text-xs tracking-wide text-pink-200">
@@ -241,10 +241,11 @@ export default function SubSectionModal({
             )}
           </div>
           {!view && (
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end pt-4">
               <IconBtn
                 disabled={loading}
                 text={loading ? "Loading.." : edit ? "Save Changes" : "Save"}
+                customClasses="w-full sm:w-auto px-6 py-3 text-sm sm:text-base"
               />
             </div>
           )}
