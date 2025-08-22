@@ -41,7 +41,7 @@ export default function SubSectionModal({
       // console.log("modalData", modalData)
       setValue("lectureTitle", modalData.title)
       setValue("lectureDesc", modalData.description)
-      setValue("lectureVideo", modalData.videoUrl)
+      setValue("lectureVideo", modalData.video) // Changed from videoUrl to video
     }
   }, [])
 
@@ -200,8 +200,8 @@ export default function SubSectionModal({
             setValue={setValue}
             errors={errors}
             video={true}
-            viewData={view ? modalData.videoUrl : null}
-            editData={edit ? modalData.videoUrl : null}
+            viewData={view ? modalData.video : null}
+            editData={edit ? modalData.video : null}
           />
           {/* Lecture Title */}
           <div className="flex flex-col space-y-2">

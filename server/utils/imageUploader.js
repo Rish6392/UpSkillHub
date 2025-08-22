@@ -30,6 +30,9 @@ exports.uploadVideoToCloudinary = async (file, folder) => {
             folder: folder,
             chunk_size: 6000000, // 6MB chunks for large files
             timeout: 120000, // 2 minutes timeout
+            format: "mp4",            // ensure mp4 delivery
+            eager_async: true,
+            eager: [{ format: "mp4" }], // create an mp4 rendition if input isn't mp4
         };
 
         const result = await cloudinary.uploader.upload(file.tempFilePath, options);

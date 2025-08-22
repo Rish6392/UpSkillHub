@@ -18,7 +18,7 @@ const port = process.env.PORT || 4000;
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
-    origin:["http://localhost:5173", "http://localhost:5174", "https://up-skill-hub-gamma.vercel.app"],
+    origin:["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "https://up-skill-hub-gamma.vercel.app"],
     credentials:true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }))
