@@ -148,9 +148,11 @@ const VideoDetails = () => {
   }
 
   const handleProgress = (state) => {
+    console.log(state);
     if (!seeking) {
       setPlayed(state.played)
       setLoaded(state.loaded)
+      console.log(state.playedSeconds)
       setWatchTime(state.playedSeconds)
       
       // Auto-mark as completed when 90% watched
@@ -252,6 +254,7 @@ const VideoDetails = () => {
   }
 
   const formatTime = (seconds) => {
+    console.log(seconds);
     const date = new Date(seconds * 1000)
     const hh = date.getUTCHours()
     const mm = date.getUTCMinutes()
@@ -452,10 +455,10 @@ const VideoDetails = () => {
             muted={muted}
             playbackRate={playbackRate}
             onTimeUpdate={handleTimeUpdate}
-            onProgress={handleProgress}
-            onDurationChange={setDuration}
+            onProgress={(p) => handleProgress(p)}
+            onDuration={(d) => setDuration(d)}
             onEnded={goToNextVideo}
-            onReady={(player) => {
+            onReady={() => {
               setPlayerReady(true)
               toast.success("Video ready!")
             }}
@@ -606,18 +609,7 @@ const VideoDetails = () => {
         )}
 
         {/* Debug: quick link to open video URL in new tab (hidden if no URL) */}
-        {videoData?.video && (
-          <div className="mt-2 text-xs text-richblack-400">
-            <a
-              href={videoData.video}
-              target="_blank"
-              rel="noreferrer"
-              className="underline hover:text-richblack-200"
-            >
-              Open video URL (debug)
-            </a>
-          </div>
-        )}
+        
       </div>
 
       {/* Video Details Section */}
