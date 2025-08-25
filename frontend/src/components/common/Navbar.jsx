@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "../../Assets/Logo/Logo-Full-Light.png";
 import { Link, matchPath } from "react-router-dom";
 import { NavbarLinks } from "../../data/navbar-links.js";
 import { useLocation } from "react-router-dom";
@@ -53,11 +54,8 @@ const Navbar = () => {
     <div className=" fixed top-0 left-0 right-0 z-[999] flex h-14  items-center justify-center border-b border-b-richblack-700 bg-richblack-900">
       <div className="flex flex-row w-11/12 max-w-maxContainer items-center justify-between">
         {/* Logo add */}
-        <Link to="/" className="flex items-center">
-          <div className="text-3xl lg:text-4xl font-bold text-white py-2">
-            <span className="text-yellow-300">UpSkill</span>
-            <span className="text-blue-300">Hub</span>
-          </div>
+        <Link to="/">
+          <img src={logo} alt="logo" width={160} height={162} loading="lazy" />
         </Link>
 
         {/* Mobile Menu Button */}
