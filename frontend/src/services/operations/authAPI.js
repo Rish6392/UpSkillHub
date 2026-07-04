@@ -209,7 +209,7 @@ export function resetPassword(password, confirmPassword, token) {
   return async(dispatch) => {
     dispatch(setLoading(true));
     try{
-      const response = await apiConnector("POST", `${RESETPASSWORD_API}/${token}`, {password, confirmPassword});
+      const response = await apiConnector("POST", RESETPASSWORD_API, {password, confirmPassword, token}); //
 
       console.log("RESET Password RESPONSE ... ", response);
 

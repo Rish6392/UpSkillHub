@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 const UpdatePassword = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { token } = useParams(); //
   const { loading } = useSelector((state) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -30,9 +31,6 @@ const UpdatePassword = () => {
   };
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    //const token = location.pathname.split("/").at(-1);
-    const { token } = useParams();
-
     dispatch(resetPassword(password, confirmPassword, token));
   };
   return (
