@@ -520,7 +520,8 @@ exports.getFullCourseDetails = async (req, res) => {
           path: "courseContent",
           populate: {
             path: "subSection",
-      select:"title"
+    // Return all fields needed by the player/UI
+    select: "title description timeDuration video"
           },
         })
         .exec()

@@ -9,6 +9,7 @@ import {
   setCompletedLectures,
   setCourseSectionData,
   setEntireCourseData,
+  setLoading,
   setTotalNoOfLectures,
 } from "../slices/viewCourseSlice"
 
@@ -20,6 +21,7 @@ export default function ViewCourse() {
 
   useEffect(() => {
     ;(async () => {
+      dispatch(setLoading(true))
       const courseData = await getFullDetailsOfCourse(courseId, token)
       // console.log("Course Data here... ", courseData.courseDetails)
       dispatch(setCourseSectionData(courseData.courseDetails.courseContent))
@@ -30,6 +32,7 @@ export default function ViewCourse() {
         lectures += sec.subSection.length
       })
       dispatch(setTotalNoOfLectures(lectures))
+      dispatch(setLoading(false))
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -39,7 +42,7 @@ export default function ViewCourse() {
       <div className="relative flex min-h-[calc(100vh-3.5rem)]">
         <VideoDetailsSidebar setReviewModal={setReviewModal} />
         <div className="h-[calc(100vh-3.5rem)] flex-1 overflow-auto bg-richblack-900 lg:ml-[320px]">
-          <div className="mx-6 py-6">
+          <div className="mx-4 lg:mx-6 py-4 lg:py-6">
             <Outlet />
           </div>
         </div>

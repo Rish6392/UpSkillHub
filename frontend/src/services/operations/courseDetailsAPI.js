@@ -158,6 +158,7 @@ export const createSubSection = async (data, token) => {
   const toastId = toast.loading("Loading...")
   try {
     const response = await apiConnector("POST", CREATE_SUBSECTION_API, data, {
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     })
     console.log("CREATE SUB-SECTION API RESPONSE............", response)
@@ -202,6 +203,7 @@ export const updateSubSection = async (data, token) => {
   const toastId = toast.loading("Loading...")
   try {
     const response = await apiConnector("PUT", UPDATE_SUBSECTION_API, data, {
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     })
     console.log("UPDATE SUB-SECTION API RESPONSE............", response)
@@ -383,7 +385,19 @@ export const createRating = async (data, token) => {
   } catch (error) {
     success = false
     console.log("CREATE RATING API ERROR............", error)
-    toast.error(error.message)
+    
+    // Handle specific error cases
+    if (error.response?.status === 403) {
+      if (error.response?.data?.message?.includes("already reviewed")) {
+        toast.error("You have already reviewed this course")
+      } else {
+        toast.error("You don't have permission to review this course")
+      }
+    } else if (error.response?.data?.message) {
+      toast.error(error.response.data.message)
+    } else {
+      toast.error(error.message || "Failed to create rating")
+    }
   }
   toast.dismiss(toastId)
   return success
