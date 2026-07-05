@@ -33,9 +33,19 @@ exports.resetPasswordToken = async (req, res) => {
         const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
         const url = `${frontendUrl}/update-password/${token}`; // frontend ka link
         // send mail containing the url
-        await mailSender(email,
+        await mailSender(
+            email,
             "Password Reset Link",
-            `Password Reset Link:${url}`
+            `<html>
+                <body>
+                    <h2>UpSkillHub Password Reset</h2>
+                    <p>You requested to reset your password. Please click the button below to set a new password:</p>
+                    <a href="${url}" style="display:inline-block;padding:10px 20px;background-color:#f97316;color:white;text-decoration:none;border-radius:5px;">Reset Password</a>
+                    <br><br>
+                    <p>If the button doesn't work, you can also copy and paste this link into your browser:</p>
+                    <p><a href="${url}">${url}</a></p>
+                </body>
+            </html>`
         );
         // return response
         return res.json({
