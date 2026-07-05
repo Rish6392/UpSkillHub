@@ -40,6 +40,12 @@ app.use("/api/v1/payment",paymentRoutes)
 app.use("/api/v1/contact",contactUsRoutes);
 
 
+// Redirect route for password reset (so email links use trusted onrender.com domain)
+app.get("/reset-password/:token", (req, res) => {
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    return res.redirect(`${frontendUrl}/update-password/${req.params.token}`);
+})
+
 //default route
 app.get("/",(req,res)=>{
     return res.json({

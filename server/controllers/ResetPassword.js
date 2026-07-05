@@ -29,9 +29,10 @@ exports.resetPasswordToken = async (req, res) => {
             },
             { new: true }
         );
-        // create url
-        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-        const url = `${frontendUrl}/update-password/${token}`; // frontend ka link
+        // create url - use backend URL for the email link (Gmail blocks vercel.app links)
+        // The backend /reset-password/:token route will redirect to the frontend
+        const backendUrl = process.env.BACKEND_URL || "http://localhost:4000";
+        const url = `${backendUrl}/reset-password/${token}`;
         // send mail containing the url
         await mailSender(
             email,
