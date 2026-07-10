@@ -13,7 +13,6 @@ const cors = require("cors"); // backend-frontent connect
 const {cloudinaryConnect} = require("./config/cloudinary")
 require('dotenv').config();
 const fileUpload = require("express-fileupload");
-const { default: redisClient } = require("./config/redis");
 const port = process.env.PORT || 4000;
 
 app.use(cookieParser());
@@ -31,14 +30,6 @@ app.use(fileUpload({
 
 db.connect();
 
-redisClient.connect().then(
-    ()=>{
-        console.log("connected to redis");
-    }
-)
-.catch((error)=>{
-    console.error("error");
-})
 
 cloudinaryConnect();
 

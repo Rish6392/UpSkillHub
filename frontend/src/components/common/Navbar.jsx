@@ -28,7 +28,7 @@ const Navbar = () => {
     try {
       const result = await apiConnector("GET", categories.CATEGORIES_API);
       //console.log("Printing Sublinks result", result);
-      setSubLinks(result.data.data);
+      setSubLinks(result.data.data || []);
     } catch (error) {
       console.log("Could not fetch the Category list");
     }
@@ -96,7 +96,7 @@ const Navbar = () => {
                           invisible group-hover:visible group-hover:opacity-100
                           group-hover:flex flex-col gap-1  group-hover:z-[999]`}
                     >
-                      {subLinks.length ? (
+                      {subLinks?.length ? (
                         subLinks.map((sublink, index) => (
                           <Link
                             to={`/catalog/${sublink?.name
